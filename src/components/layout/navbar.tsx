@@ -27,6 +27,10 @@ const navItems: { key: string; page: Page }[] = [
   { key: 'nav.about', page: { type: 'about' } },
 ]
 
+const INK = '#202B26'
+const BOARD = '#E4E7E2'
+const ACCENT = '#E8A33D'
+
 export function Navbar() {
   const { currentPage, navigate } = useNavigation()
   const { user, logout, setUser } = useAuth()
@@ -73,54 +77,60 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b transition-colors duration-150 ${
-        scrolled ? 'bg-background/95 backdrop-blur-sm' : 'bg-background'
-      }`}
+      className="sticky top-0 z-50 w-full border-b-2 transition-colors duration-150"
+      style={{
+        backgroundColor: BOARD,
+        borderColor: INK,
+        boxShadow: scrolled ? `0 2px 0 0 ${INK}` : 'none',
+      }}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Logo */}
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-6">
         <button
           onClick={() => handleNav({ type: 'home' })}
-          className="flex items-center gap-2 text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
+          className="flex items-center gap-2 rounded-none border-2 bg-white px-2 py-1.5 text-sm font-semibold tracking-tight transition-transform hover:-translate-y-0.5 sm:px-2.5"
+          style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
         >
           <img src="/logo.svg" alt="Toolbox logo" className="h-7 w-7" />
-          <span>toolbox</span>
+          <span className="font-black uppercase" style={{ color: INK }}>
+            toolbox
+          </span>
         </button>
 
-        {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
             <button
               key={item.key}
               onClick={() => handleNav(item.page)}
-              className={`rounded-sm px-3 py-1.5 text-sm transition-colors ${
-                isActive(item.page)
-                  ? 'text-foreground font-medium'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className="rounded-none border-2 px-3 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] transition-all hover:-translate-y-0.5"
+              style={{
+                borderColor: isActive(item.page) ? INK : 'transparent',
+                backgroundColor: isActive(item.page) ? '#FBEBD3' : 'transparent',
+                color: isActive(item.page) ? INK : '#68706b',
+              }}
             >
               {t(item.key)}
             </button>
           ))}
         </nav>
 
-        {/* Desktop right side */}
         <div className="hidden items-center gap-3 md:flex">
           <button
             onClick={() => setLocale(locale === 'en' ? 'id' : 'en')}
-            className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="rounded-none border-2 px-2.5 py-1.5 font-mono text-[11px] font-black uppercase tracking-[0.2em] transition-transform hover:-translate-y-0.5"
+            style={{ borderColor: INK, color: INK, backgroundColor: '#fff' }}
           >
             {locale === 'en' ? 'EN' : 'ID'}
           </button>
           {currentPage.type !== 'search' && (
             <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2" style={{ color: INK }} />
               <Input
                 type="search"
                 placeholder={t('nav.search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-8 w-44 rounded-sm border pl-8 text-sm lg:w-56"
+                className="h-8 w-44 rounded-none border-2 pl-8 text-sm lg:w-56"
+                style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
               />
             </form>
           )}
@@ -128,12 +138,13 @@ export function Navbar() {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => handleNav({ type: 'tools' })}
-                className="flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="flex items-center gap-1.5 rounded-none border-2 px-2.5 py-1.5 text-sm transition-transform hover:-translate-y-0.5"
+                style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}
                 title={t('nav.favorites')}
               >
                 <Heart className="h-3.5 w-3.5" />
               </button>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5 rounded-none border-2 px-2.5 py-1.5 text-sm" style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}>
                 <User className="h-3.5 w-3.5" />
                 <span className="max-w-20 truncate">{user.name || user.email}</span>
               </div>
@@ -141,7 +152,8 @@ export function Navbar() {
                 variant="ghost"
                 size="sm"
                 onClick={logout}
-                className="h-8 rounded-sm px-2 text-muted-foreground hover:text-foreground"
+                className="h-8 rounded-none border-2 px-2 transition-transform hover:-translate-y-0.5"
+                style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}
                 title={t('nav.logout')}
               >
                 <LogOut className="h-3.5 w-3.5" />
@@ -152,7 +164,8 @@ export function Navbar() {
               variant="outline"
               size="sm"
               onClick={() => handleNav({ type: 'login' })}
-              className="h-8 rounded-sm"
+              className="h-8 rounded-none border-2 px-3 transition-transform hover:-translate-y-0.5"
+              style={{ borderColor: INK, backgroundColor: ACCENT, color: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
             >
               <LogIn className="mr-1.5 h-3.5 w-3.5" />
               {t('nav.login')}
@@ -160,89 +173,72 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile: search + menu */}
         <div className="flex items-center gap-2 md:hidden">
-          {searchOpen ? (
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                autoFocus
-                type="search"
-                placeholder={t('nav.search')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-8 w-36 rounded-sm border pl-8 text-sm"
-              />
-            </form>
-          ) : (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="h-8 w-8 rounded-sm p-0"
-            >
-              <Search className="h-4 w-4" />
-            </Button>
-          )}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 rounded-sm p-0">
+              <Button variant="ghost" size="sm" className="h-10 w-10 rounded-none border-2 p-0" style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}>
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 rounded-none p-0">
+            <SheetContent side="right" hideCloseButton className="w-[85vw] max-w-sm rounded-none p-0" style={{ backgroundColor: BOARD }}>
               <SheetTitle className="sr-only">{t('nav.menu')}</SheetTitle>
-              <div className="flex h-14 items-center justify-between border-b px-4">
-                <span className="text-sm font-semibold tracking-tight">{t('nav.menu')}</span>
+              <div className="flex h-14 items-center justify-between border-b-2 px-4" style={{ borderColor: INK }}>
+                <span className="text-sm font-semibold tracking-tight" style={{ color: INK }}>
+                  {t('nav.menu')}
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setMobileOpen(false)}
-                  className="h-8 w-8 rounded-sm p-0"
+                  className="h-8 w-8 rounded-none border-2 p-0"
+                  style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <nav className="flex flex-col p-2">
+              <nav className="flex flex-1 flex-col overflow-y-auto p-2">
                 {navItems.map((item) => (
                   <button
                     key={item.key}
                     onClick={() => handleNav(item.page)}
-                    className={`rounded-sm px-3 py-2.5 text-sm transition-colors ${
-                      isActive(item.page)
-                        ? 'bg-secondary text-foreground font-medium'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
+                    className="rounded-none border-2 px-3 py-3 text-left text-sm transition-colors"
+                    style={{
+                      borderColor: isActive(item.page) ? INK : 'transparent',
+                      backgroundColor: isActive(item.page) ? '#FBEBD3' : '#fff',
+                      color: INK,
+                    }}
                   >
                     {t(item.key)}
                   </button>
                 ))}
-                <div className="my-2 border-t" />
+                <div className="my-2 border-t-2" style={{ borderColor: INK }} />
                 <div className="flex items-center gap-1.5 px-3 py-2.5">
                   {locales.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => setLocale(l.code)}
-                      className={`rounded-sm border px-3 py-1.5 text-sm font-medium transition-colors ${
-                        locale === l.code
-                          ? 'border-primary bg-primary/10 text-foreground'
-                          : 'border-transparent text-muted-foreground hover:text-foreground'
-                      }`}
+                      className="rounded-none border-2 px-3 py-1.5 text-sm font-medium transition-colors"
+                      style={{
+                        borderColor: locale === l.code ? INK : 'transparent',
+                        backgroundColor: locale === l.code ? '#FBEBD3' : '#fff',
+                        color: INK,
+                      }}
                     >
                       {l.flag} {l.label}
                     </button>
                   ))}
                 </div>
-                <div className="my-2 border-t" />
+                <div className="my-2 border-t-2" style={{ borderColor: INK }} />
                 {user ? (
                   <>
-                    <div className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-3 rounded-none border-2 px-3 py-2 text-sm" style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}>
                       <User className="h-4 w-4" />
                       <span className="truncate">{user.name || user.email}</span>
                     </div>
                     <button
                       onClick={() => { logout(); setMobileOpen(false) }}
-                      className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      className="flex items-center gap-3 rounded-none border-2 px-3 py-2.5 text-sm transition-colors"
+                      style={{ borderColor: INK, backgroundColor: '#fff', color: INK }}
                     >
                       <LogOut className="h-4 w-4" />
                       {t('nav.logout')}
@@ -251,7 +247,8 @@ export function Navbar() {
                 ) : (
                   <button
                     onClick={() => handleNav({ type: 'login' })}
-                    className="flex items-center gap-3 rounded-sm px-3 py.2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="flex items-center gap-3 rounded-none border-2 px-3 py-2.5 text-sm transition-colors"
+                    style={{ borderColor: INK, backgroundColor: ACCENT, color: INK }}
                   >
                     <LogIn className="h-4 w-4" />
                     {t('nav.login')}

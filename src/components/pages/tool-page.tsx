@@ -8,6 +8,10 @@ import { getToolName, getToolDescription, getCategoryName } from '@/lib/i18n/tra
 import { Button } from '@/components/ui/button'
 import { ToolSymbol } from '@/components/shared/tool-symbol'
 import { Heart, ArrowLeft } from 'lucide-react'
+
+const INK = '#202B26'
+const BOARD = '#E4E7E2'
+const ACCENT = '#E8A33D'
 import { useMutation } from '@tanstack/react-query'
 import { dynamicImportTool } from '@/lib/tool-registry'
 import type { ComponentType } from 'react'
@@ -81,84 +85,91 @@ export function ToolPage({ slug }: { slug: string }) {
 
   if (loading) {
     return (
-      <div className="pb-12">
-        <div className="h-3 w-6 animate-pulse rounded-sm bg-muted" />
-        <div className="mt-2 h-5 w-48 animate-pulse rounded-sm bg-muted" />
-        <div className="mt-2 h-3 w-64 animate-pulse rounded-sm bg-muted" />
-        <div className="mt-6 h-64 animate-pulse rounded-sm border bg-secondary/30" />
+      <div className="pb-12" style={{ backgroundColor: BOARD }}>
+        <div className="h-3 w-6 animate-pulse rounded-none border-2 bg-white" style={{ borderColor: INK }} />
+        <div className="mt-2 h-5 w-48 animate-pulse rounded-none border-2 bg-white" style={{ borderColor: INK }} />
+        <div className="mt-2 h-3 w-64 animate-pulse rounded-none border-2 bg-white" style={{ borderColor: INK }} />
+        <div className="mt-6 h-64 animate-pulse rounded-none border-2 bg-white" style={{ borderColor: INK }} />
       </div>
     )
   }
 
   if (!tool) {
     return (
-      <div className="pb-12">
+      <div className="pb-12" style={{ backgroundColor: BOARD }}>
         <button
           onClick={() => navigate({ type: 'tools' })}
-          className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="mb-4 flex items-center gap-1.5 rounded-none border-2 bg-white px-3 py-2 text-sm font-semibold transition-all hover:-translate-y-0.5"
+          style={{ borderColor: INK, color: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           {t('shared.backToTools')}
         </button>
-        <p className="text-sm text-muted-foreground">{t('tool.notFound')}</p>
+        <p className="text-sm" style={{ color: `${INK}CC` }}>{t('tool.notFound')}</p>
       </div>
     )
   }
 
   return (
-    <div className="pb-12">
-      {/* Back + Header */}
+    <div className="pb-12" style={{ backgroundColor: BOARD }}>
       <button
         onClick={() => navigate({ type: 'tools' })}
-        className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        className="mb-4 flex items-center gap-1.5 rounded-none border-2 bg-white px-3 py-2 text-sm font-semibold transition-all hover:-translate-y-0.5"
+        style={{ borderColor: INK, color: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t('tool.back')}
       </button>
 
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border bg-background">
-            <ToolSymbol slug={tool.slug} size="md" />
+      <div className="rounded-none border-2 bg-white p-4 sm:p-5" style={{ borderColor: INK, boxShadow: `3px 3px 0 0 ${INK}` }}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-none border-2" style={{ borderColor: INK, backgroundColor: '#FBEBD3' }}>
+              <ToolSymbol slug={tool.slug} size="md" />
+            </div>
+            <div>
+              <h1 className="text-lg font-black uppercase tracking-[0.12em] sm:text-xl" style={{ color: INK }}>
+                {getToolName(tool.slug, locale)}
+              </h1>
+              <p className="mt-1 text-sm leading-relaxed" style={{ color: `${INK}CC` }}>
+                {getToolDescription(tool.slug, locale)}
+              </p>
+              <span className="mt-2 inline-block rounded-none border-2 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em]" style={{ borderColor: INK, color: INK, backgroundColor: '#FBEBD3' }}>
+                {getCategoryName(tool.category.slug, locale)}
+              </span>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-semibold tracking-tight sm:text-xl">{getToolName(tool.slug, locale)}</h1>
-            <p className="mt-0.5 text-sm text-muted-foreground">{getToolDescription(tool.slug, locale)}</p>
-            <span className="mt-1.5 inline-block font-mono text-[10px] text-muted-foreground/60">
-              {getCategoryName(tool.category.slug, locale)}
-            </span>
-          </div>
+          {user && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toggleFav.mutate()}
+              className="h-10 shrink-0 rounded-none border-2 px-3 text-sm"
+              style={{ borderColor: INK, color: INK, backgroundColor: '#fff', boxShadow: `2px 2px 0 0 ${INK}` }}
+            >
+              <Heart
+                className="mr-1.5 h-3.5 w-3.5"
+                fill={isFav ? 'currentColor' : 'none'}
+              />
+              {isFav ? t('tool.saved') : t('tool.save')}
+            </Button>
+          )}
         </div>
-        {user && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => toggleFav.mutate()}
-            className="h-8 shrink-0 rounded-sm"
-          >
-            <Heart
-              className="mr-1.5 h-3.5 w-3.5"
-              fill={isFav ? 'currentColor' : 'none'}
-            />
-            {isFav ? t('tool.saved') : t('tool.save')}
-          </Button>
-        )}
       </div>
 
-      {/* Tool area */}
-      <div className="mt-6 overflow-hidden rounded-sm border">
+      <div className="mt-6 overflow-hidden rounded-none border-2 bg-white" style={{ borderColor: INK, boxShadow: `3px 3px 0 0 ${INK}` }}>
         {ToolComponent ? (
           <ToolComponent />
         ) : toolNotImplemented ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <span className="font-mono text-2xl text-muted-foreground/20">—</span>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <span className="font-mono text-2xl" style={{ color: `${INK}20` }}>—</span>
+            <p className="mt-2 text-sm" style={{ color: `${INK}CC` }}>
               {t('tool.notImplemented') || 'Tool coming soon.'}
             </p>
           </div>
         ) : (
           <div className="flex h-48 items-center justify-center">
-            <span className="font-mono text-xs text-muted-foreground/40 animate-pulse">loading...</span>
+            <span className="font-mono text-xs animate-pulse" style={{ color: `${INK}60` }}>loading...</span>
           </div>
         )}
       </div>

@@ -11,6 +11,9 @@ import { Button } from '@/components/ui/button'
 import { Search, X, SlidersHorizontal } from 'lucide-react'
 import { EmptyState } from '@/components/shared/decorations'
 
+const INK = '#202B26'
+const BOARD = '#E4E7E2'
+
 export function ToolsPage({ categoryId }: { categoryId?: string }) {
   const { navigate } = useNavigation()
   const { t, locale } = useT()
@@ -50,41 +53,47 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
     : null
 
   return (
-    <div className="pb-12">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+    <div className="pb-12" style={{ backgroundColor: BOARD }}>
+      <div className="mb-6 rounded-none border-2 bg-white p-4 sm:p-6" style={{ borderColor: INK, boxShadow: `3px 3px 0 0 ${INK}` }}>
+        <p className="font-mono text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: `${INK}CC` }}>
+          {activeCatName ? 'filtered' : 'catalog'}
+        </p>
+        <h1 className="mt-2 text-xl font-black tracking-tight sm:text-2xl" style={{ color: INK }}>
           {activeCatName || t('tools.title')}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-sm" style={{ color: `${INK}CC` }}>
           {activeCatName ? t('tools.filtered', { category: activeCatName }) : t('tools.subtitle')}
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+      <div className="mb-4 flex flex-col gap-3 rounded-none border-2 bg-white p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4" style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}>
+        <div className="relative flex-1 sm:max-w-xs">
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2" style={{ color: INK }} />
           <Input
             placeholder={t('tools.filter')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-8 rounded-sm border pl-8 text-sm"
+            className="h-10 rounded-none border-2 pl-8 text-sm"
+            style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
           />
           {search && (
             <button
               onClick={() => setSearch('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+              style={{ color: INK }}
             >
               <X className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {activeCategory && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => { setActiveCategory(null); if (categoryId) navigate({ type: 'tools' }) }}
-              className="h-8 rounded-sm text-xs"
+              className="h-10 rounded-none border-2 text-xs"
+              style={{ borderColor: INK, color: INK, backgroundColor: '#fff' }}
             >
               {t('tools.clearFilter')}
             </Button>
@@ -93,7 +102,8 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
             variant="outline"
             size="sm"
             onClick={() => setShowCategories(!showCategories)}
-            className="h-8 rounded-sm text-xs"
+            className="h-10 rounded-none border-2 text-xs"
+            style={{ borderColor: INK, color: INK, backgroundColor: '#fff', boxShadow: `2px 2px 0 0 ${INK}` }}
           >
             <SlidersHorizontal className="mr-1.5 h-3.5 w-3.5" />
             {t('tools.categories')}
@@ -102,7 +112,7 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
       </div>
 
       {showCategories && (
-        <div className="mt-3 grid gap-px overflow-hidden rounded-sm border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -110,13 +120,16 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
                 setActiveCategory(activeCategory === cat.slug ? null : cat.slug)
                 setShowCategories(false)
               }}
-              className={`flex items-center gap-3 bg-background p-3 text-left transition-colors hover:bg-secondary/50 ${
-                activeCategory === cat.slug ? 'bg-secondary' : ''
-              }`}
+              className="flex items-center gap-3 rounded-none border-2 bg-white p-3 text-left transition-all hover:-translate-y-0.5"
+              style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
             >
-              <span className="font-mono text-xs text-muted-foreground">{getCategoryName(cat.slug, locale).charAt(0)}</span>
-              <span className="text-sm font-medium">{getCategoryName(cat.slug, locale)}</span>
-              <span className="ml-auto font-mono text-xs tabular-nums text-muted-foreground">
+              <span className="font-mono text-xs" style={{ color: `${INK}CC` }}>
+                {getCategoryName(cat.slug, locale).charAt(0)}
+              </span>
+              <span className="text-sm font-black uppercase tracking-[0.12em]" style={{ color: INK }}>
+                {getCategoryName(cat.slug, locale)}
+              </span>
+              <span className="ml-auto font-mono text-xs tabular-nums" style={{ color: `${INK}CC` }}>
                 {cat._count?.tools || 0}
               </span>
             </button>
@@ -124,11 +137,11 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
         </div>
       )}
 
-      <div className="mt-6">
+      <div className="mt-2">
         {loading ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-20 animate-pulse rounded-sm bg-secondary/40" />
+              <div key={i} className="h-20 animate-pulse rounded-none border-2" style={{ borderColor: `${INK}33`, backgroundColor: '#fff' }} />
             ))}
           </div>
         ) : filtered.length === 0 ? (
@@ -138,7 +151,7 @@ export function ToolsPage({ categoryId }: { categoryId?: string }) {
             description={t('tools.empty.desc')}
           />
         ) : (
-          <div className="grid gap-px overflow-hidden rounded-sm border sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}

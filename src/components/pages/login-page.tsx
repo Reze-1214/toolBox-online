@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 
+const INK = '#202B26'
+
 export function LoginPage() {
   const { navigate } = useNavigation()
   const { setUser } = useAuth()
@@ -48,18 +50,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="flex min-h-[60vh] items-center justify-center px-4 py-6">
+      <div className="w-full max-w-sm rounded-none border-2 bg-white p-5 sm:p-6" style={{ borderColor: INK, boxShadow: `3px 3px 0 0 ${INK}` }}>
         <div className="mb-6">
-          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">account</p>
-          <h1 className="mt-1 text-xl font-semibold tracking-tight">{t('login.title')}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="font-mono text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: `${INK}CC` }}>account</p>
+          <h1 className="mt-1 text-xl font-black tracking-tight" style={{ color: INK }}>{t('login.title')}</h1>
+          <p className="mt-1 text-sm" style={{ color: `${INK}CC` }}>
             {t('login.subtitle')}
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-sm">{t('login.email')}</Label>
+            <Label htmlFor="email" className="text-sm font-black uppercase tracking-[0.12em]" style={{ color: INK }}>{t('login.email')}</Label>
             <Input
               id="email"
               type="email"
@@ -67,11 +69,12 @@ export function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder={t('auth.emailPlaceholder')}
-              className="h-9 rounded-sm text-sm"
+              className="h-9 rounded-none border-2 text-sm"
+              style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-sm">{t('login.password')}</Label>
+            <Label htmlFor="password" className="text-sm font-black uppercase tracking-[0.12em]" style={{ color: INK }}>{t('login.password')}</Label>
             <Input
               id="password"
               type="password"
@@ -79,7 +82,8 @@ export function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder={t('auth.passwordPlaceholder')}
-              className="h-9 rounded-sm text-sm"
+              className="h-9 rounded-none border-2 text-sm"
+              style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
             />
           </div>
           {error && (
@@ -88,16 +92,18 @@ export function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-9 w-full rounded-sm text-sm"
+            className="h-9 w-full rounded-none border-2 text-sm font-black uppercase tracking-[0.16em]"
+            style={{ borderColor: INK, backgroundColor: '#E8A33D', color: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
           >
             {loading ? t('login.loggingIn') : t('login.submit')}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm" style={{ color: `${INK}CC` }}>
           {t('login.noAccount')}{' '}
           <button
             onClick={() => navigate({ type: 'register' })}
-            className="font-medium text-foreground underline-offset-4 hover:underline"
+            className="font-black underline-offset-4 hover:underline"
+            style={{ color: INK }}
           >
             {t('login.register')}
           </button>

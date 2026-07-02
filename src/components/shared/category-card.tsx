@@ -7,6 +7,8 @@ import { useLocale } from '@/lib/i18n/locale-store'
 import { getCategoryName, getCategoryDescription } from '@/lib/i18n/translations'
 import { ArrowRight } from 'lucide-react'
 
+const INK = '#202B26'
+
 export interface CategoryData {
   id: string
   name: string
@@ -30,25 +32,31 @@ export function CategoryCard({ category, compact = false }: CategoryCardProps) {
     <button
       onClick={() => navigate({ type: 'tools', categoryId: category.slug })}
       className={cn(
-        'group flex items-center gap-3 rounded-sm border p-3 text-left transition-colors hover:border-foreground/20',
-        compact && 'p-2.5 gap-2.5'
+        'group relative flex items-center gap-3 overflow-hidden border-2 bg-white p-3 text-left transition-all hover:-translate-y-0.5 sm:p-4',
+        compact && 'gap-2.5 p-2.5'
       )}
+      style={{ borderColor: INK, boxShadow: `2px 2px 0 0 ${INK}` }}
     >
-      <ToolSymbol slug={category.slug} className="shrink-0 w-5 text-center" />
+      <span className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: '#E8A33D' }} aria-hidden="true" />
+      <div className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-none border-2" style={{ borderColor: INK, backgroundColor: '#FBEBD3' }}>
+        <ToolSymbol slug={category.slug} className="w-4 text-center" />
+      </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-foreground">{getCategoryName(category.slug, locale)}</span>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-black uppercase tracking-[0.12em]" style={{ color: INK }}>
+            {getCategoryName(category.slug, locale)}
+          </span>
           <div className="flex items-center gap-2">
             {category._count && (
-              <span className="font-mono text-xs tabular-nums text-muted-foreground">
+              <span className="font-mono text-xs tabular-nums" style={{ color: `${INK}CC` }}>
                 {category._count.tools}
               </span>
             )}
-            <ArrowRight className="h-3 w-3 text-muted-foreground/20 transition-opacity group-hover:opacity-60" />
+            <ArrowRight className="h-3 w-3 transition-opacity group-hover:opacity-70" style={{ color: INK }} />
           </div>
         </div>
         {!compact && category.description && (
-          <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+          <p className="mt-1 line-clamp-1 text-xs" style={{ color: `${INK}CC` }}>
             {getCategoryDescription(category.slug, locale)}
           </p>
         )}
