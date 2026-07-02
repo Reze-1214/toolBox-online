@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   title: "Toolbox — All Online Tools in One Place",
   description: "Fast, free tools that work instantly without installation. QR generator, password generator, JSON formatter, and more.",
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
   },
 };
 
